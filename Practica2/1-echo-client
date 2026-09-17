@@ -1,0 +1,25 @@
+#!/usr/bin/env python3
+import socket
+
+HOST = "localhost"
+PORT = 65432
+buffer_size = 1024
+
+# Creación del socket sin la cláusula 'with'
+TCPClientSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+TCPClientSocket.connect((HOST, PORT))
+
+while True:
+    mensaje = input()
+    TCPClientSocket.sendall(mensaje.encode("utf-8"))
+
+    data = TCPClientSocket.recv(buffer_size)
+    respuesta = data.decode("utf-8")
+    print("Servidor:", respuesta)
+
+    # Evalúa si el usuario envió 'adiós' para romper el bucle local
+    if mensaje.strip().lower() == "adiós" or mensaje.strip().lower() == "adios":
+        break
+
+# Cierre manual del socket
+TCPClientSocket.close()
